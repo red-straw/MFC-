@@ -1,0 +1,91 @@
+#include <GL/glut.h>
+#include <iostream>
+
+GLfloat rotationAngle = 0.0f;
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    glTranslatef(0.0f, 0.0f, -5.0f);
+    glRotatef(rotationAngle, 1.0f, 1.0f, 1.0f); // X, Y, Z 축으로 회전
+
+    glBegin(GL_TRIANGLES);
+
+    // 위쪽 뿔
+    glColor3f(1.0f, 0.0f, 0.0f); // 빨간색
+    glVertex3f(0.0f, 1.0f, 0.0f); // 위 꼭짓점
+    glVertex3f(-1.0f, 0.0f, 1.0f);
+    glVertex3f(1.0f, 0.0f, 1.0f);
+
+    glColor3f(0.0f, 1.0f, 0.0f); // 초록색
+    glVertex3f(0.0f, 1.0f, 0.0f); // 위 꼭짓점
+    glVertex3f(1.0f, 0.0f, 1.0f);
+    glVertex3f(1.0f, 0.0f, -1.0f);
+
+    glColor3f(0.0f, 0.0f, 1.0f); // 파란색
+    glVertex3f(0.0f, 1.0f, 0.0f); // 위 꼭짓점
+    glVertex3f(1.0f, 0.0f, -1.0f);
+    glVertex3f(-1.0f, 0.0f, -1.0f);
+
+    glColor3f(1.0f, 1.0f, 0.0f); // 노란색
+    glVertex3f(0.0f, 1.0f, 0.0f); // 위 꼭짓점
+    glVertex3f(-1.0f, 0.0f, -1.0f);
+    glVertex3f(-1.0f, 0.0f, 1.0f);
+
+    // 아래쪽 뿔
+    glColor3f(1.0f, 0.0f, 1.0f); // 자홍색
+    glVertex3f(0.0f, -1.0f, 0.0f); // 아래 꼭짓점
+    glVertex3f(-1.0f, 0.0f, 1.0f);
+    glVertex3f(1.0f, 0.0f, 1.0f);
+
+    glColor3f(0.0f, 1.0f, 1.0f); // 청록색
+    glVertex3f(0.0f, -1.0f, 0.0f); // 아래 꼭짓점
+    glVertex3f(1.0f, 0.0f, 1.0f);
+    glVertex3f(1.0f, 0.0f, -1.0f);
+
+    glColor3f(1.0f, 0.5f, 0.0f); // 주황색
+    glVertex3f(0.0f, -1.0f, 0.0f); // 아래 꼭짓점
+    glVertex3f(1.0f, 0.0f, -1.0f);
+    glVertex3f(-1.0f, 0.0f, -1.0f);
+
+    glColor3f(0.5f, 0.0f, 1.0f); // 보라색
+    glVertex3f(0.0f, -1.0f, 0.0f); // 아래 꼭짓점
+    glVertex3f(-1.0f, 0.0f, -1.0f);
+    glVertex3f(-1.0f, 0.0f, 1.0f);
+
+    glEnd();
+
+    glutSwapBuffers();
+}
+
+void reshape(int width, int height) {
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+void update(int value) {
+    rotationAngle += 2.0f;
+    if (rotationAngle > 360) {
+        rotationAngle -= 360;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(16, update, 0);
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(512, 512);
+    glutCreateWindow("OpenGL Diamond");
+    glEnable(GL_DEPTH_TEST);
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutTimerFunc(16, update, 0);
+    glutMainLoop();
+    return 0;
+}
